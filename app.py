@@ -53,15 +53,18 @@ def main():
 
                 if runline == None:
                     print("---------------------- RUNLINE IS NONE")
-                    runline = re.findall(runline_pattern, line)
-
+                    runline_matches = re.findall(runline_pattern, line)
+                    if runline_matches:
+                        runline = runline_matches[0]
                     print(f"Found runline: {runline}")  
 
                 if moneyline == None:
                     print("------------------------------- MONEYLINE IS NONE")
                     cleaned_line = line.strip()
                     if len(cleaned_line) == 4:
-                        moneyline = re.findall(moneyline_pattern, line)
+                        if moneyline_matches:
+                            moneyline_matches = re.findall(moneyline_pattern, line)
+                        moneyline = moneyline_matches[0]
                     
                         print(f"Found moneyline: {moneyline}")
 
