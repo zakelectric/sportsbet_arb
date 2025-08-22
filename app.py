@@ -20,6 +20,8 @@ driver.get(url)
 
 def main():
     append_data = False
+    moneyline_matches = None
+    runline_matches = None
     moneyline = None
     runline = None
     line_counter = 0
@@ -56,19 +58,18 @@ def main():
                     runline_matches = re.findall(runline_pattern, line)
                     if runline_matches:
                         runline = runline_matches[0]
-                    print(f"Found runline: {runline}")  
+                        print(f"Found runline: {runline}")  
 
                 if moneyline == None:
                     print("------------------------------- MONEYLINE IS NONE")
                     cleaned_line = line.strip()
-                    if len(cleaned_line) == 4:
+                    if len(cleaned_line) > 3 and len(cleaned_line) < 6:
+                        moneyline_matches = re.findall(moneyline_pattern, line)
                         if moneyline_matches:
-                            moneyline_matches = re.findall(moneyline_pattern, line)
-                        moneyline = moneyline_matches[0]
-                    
-                        print(f"Found moneyline: {moneyline}")
+                            moneyline = moneyline_matches[0]
+                            print(f"Found moneyline: {moneyline}")
 
-                if moneyline or runline:
+                if moneyline and runline:
                     print("\n\nBoth moneyline and runline found!") 
                     print("Team:", team)
                     print("Moneyline", moneyline)
