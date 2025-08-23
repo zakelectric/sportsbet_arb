@@ -40,10 +40,10 @@ def main():
         page_text = soup.get_text(separator='\n', strip=True)
 
         for line in page_text.split('\n'):
-            print("#:", line)
+            #print("#:", line)
             match, score = process.extractOne(line, mlb_teams)
             if score > 80:
-                print(f"Matched team: {match} (score: {score})")
+                #print(f"Matched team: {match} (score: {score})")
                 team = match
                 append_data = True
             
@@ -51,30 +51,31 @@ def main():
 
             if append_data:
 
-                print("------------------------ appending data")
+                #print("DEBUG: ------------------------ appending data")
 
                 if runline == None:
-                    print("---------------------- RUNLINE IS NONE")
+                    #print("DEBUG: ---------------------- RUNLINE IS NONE")
                     runline_matches = re.findall(runline_pattern, line)
                     if runline_matches:
                         runline = runline_matches[0]
-                        print(f"Found runline: {runline}")  
+                        #print(f"Found runline: {runline}")  
 
                 if moneyline == None:
-                    print("------------------------------- MONEYLINE IS NONE")
+                    #print("DEBUG: ------------------------------- MONEYLINE IS NONE")
                     cleaned_line = line.strip()
                     if len(cleaned_line) > 3 and len(cleaned_line) < 6:
                         moneyline_matches = re.findall(moneyline_pattern, line)
                         if moneyline_matches:
                             moneyline = moneyline_matches[0]
-                            print(f"Found moneyline: {moneyline}")
+                            #print(f"Found moneyline: {moneyline}")
 
                 if moneyline and runline:
                     print("\n\nBoth moneyline and runline found!") 
                     print("Team:", team)
                     print("Moneyline", moneyline)
                     print("Runline", runline)
-                    input()                       
+                    runline = None
+                    moneyline = None
                 
                 if line_counter > 5:
                     line_counter = 0
