@@ -31,7 +31,7 @@ def scrape_betus(driver):
     with open("mlb_teams.json") as f:
         mlb_teams = json.load(f)
 
-    url = "https://www.betus.com.pa/sportsbook/lines/"
+    url = "https://www.betus.com.pa/sportsbook/mlb/"
     driver.get(url)
     
     print("Hit ENTER to proceed with scraping...")
@@ -83,11 +83,11 @@ def scrape_betus(driver):
 
                 row = {
                     "team": team,
-                    "gamenumber": game_number,
+                    "gamenumber_betus": game_number,
                     "sportsbook": "betus",
-                    "moneyline": moneyline,
-                    "moneyline_impl": moneyline_impl,
-                    "runline": runline
+                    "moneyline_betus": moneyline,
+                    "moneyline_impl_betus": moneyline_impl,
+                    "runline_betus": runline
                 }
                 rows.append(row)
 
@@ -101,7 +101,7 @@ def scrape_betus(driver):
                 x = 0
                 game_number += 1
 
-    df = pd.DataFrame(rows, columns=["team", "gamenumber", "sportsbook", "moneyline", "moneyline_impl", "runline"])
+    df = pd.DataFrame(rows, columns=["team", "gamenumber_betus", "sportsbook", "moneyline_betus", "moneyline_impl_betus", "runline_betus"])
 
     return df
                            

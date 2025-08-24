@@ -1,5 +1,5 @@
 [
-  { "name": "Arizona Diamondbacks", "abbr": "ARI" },
+  { "name": "Arizona Diamondbacks", "abbr": "AZ" },
   { "name": "Atlanta Braves", "abbr": "ATL" },
   { "name": "Baltimore Orioles", "abbr": "BAL" },
   { "name": "Boston Red Sox", "abbr": "BOS" },
@@ -10,7 +10,7 @@
   { "name": "Colorado Rockies", "abbr": "COL" },
   { "name": "Detroit Tigers", "abbr": "DET" },
   { "name": "Houston Astros", "abbr": "HOU" },
-  { "name": "Kansas City Royals", "abbr": "KCR" },
+  { "name": "Kansas City Royals", "abbr": "KC" },
   { "name": "Los Angeles Angels", "abbr": "LAA" },
   { "name": "Los Angeles Dodgers", "abbr": "LAD" },
   { "name": "Miami Marlins", "abbr": "MIA" },
@@ -18,15 +18,15 @@
   { "name": "Minnesota Twins", "abbr": "MIN" },
   { "name": "New York Yankees", "abbr": "NYY" },
   { "name": "New York Mets", "abbr": "NYM" },
-  { "name": "Oakland Athletics", "abbr": "OAK" },
+  { "name": "Oakland Athletics", "abbr": "ATH" },
   { "name": "Philadelphia Phillies", "abbr": "PHI" },
   { "name": "Pittsburgh Pirates", "abbr": "PIT" },
-  { "name": "San Diego Padres", "abbr": "SDP" },
-  { "name": "San Francisco Giants", "abbr": "SFG" },
+  { "name": "San Diego Padres", "abbr": "SD" },
+  { "name": "San Francisco Giants", "abbr": "SF" },
   { "name": "Seattle Mariners", "abbr": "SEA" },
   { "name": "St. Louis Cardinals", "abbr": "STL" },
-  { "name": "Tampa Bay Rays", "abbr": "TBR" },
+  { "name": "Tampa Bay Rays", "abbr": "TB" },
   { "name": "Texas Rangers", "abbr": "TEX" },
   { "name": "Toronto Blue Jays", "abbr": "TOR" },
-  { "name": "Washington Nationals", "abbr": "WSN" }
+  { "name": "Washington Nationals", "abbr": "WSH" }
 ]
