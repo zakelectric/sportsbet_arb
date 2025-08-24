@@ -22,11 +22,13 @@ for market in markets_data['markets']:
     if market['title'] != last_game:
         game_number += 1
 
+    yes_bid_decimal = market['yes_bid'] * .01
+
     row = {
         "team": market['ticker'][-3:],
         "gamenumber": game_number,
         "sportsbook": "kalshi",
-        "moneyline": market['yes_bid'],
+        "moneyline": yes_bid_decimal,
         "runline": "null"
     }
     rows.append(row)
