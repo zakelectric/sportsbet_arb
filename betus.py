@@ -25,18 +25,30 @@ def main():
     moneyline = None
     runline = None
     line_counter = 0
+    x = 0
+    game_number = 0
+
+    def process_moneyline(moneyline):
+
+        moneyline = float(moneyline)
+
+        if moneyline < 0:
+            result = abs(moneyline) / (abs(moneyline) + 100)
+        else:
+            result = 100 / (abs(moneyline) + 100)
+        return result
 
     with open("mlb_teams.json") as f:
         mlb_teams = json.load(f)
 
     while True:
 
-        html = driver.page_source
-
-        soup = BeautifulSoup(html, "lxml")
         print("Hit ENTER to proceed with scraping...")
         input()
 
+        rows = []
+        html = driver.page_source
+        soup = BeautifulSoup(html, "lxml")
         page_text = soup.get_text(separator='\n', strip=True)
 
         for line in page_text.split('\n'):
@@ -74,13 +86,34 @@ def main():
                     print("Team:", team)
                     print("Moneyline", moneyline)
                     print("Runline", runline)
+                    x += 1
+
+                    moneyline_impl = process_moneyline(moneyline)
+
+                    row = {
+                        "team": team,
+                        "gamenumber": game_number,
+                        "sportsbook": "betus",
+                        "moneyline": moneyline,
+                        "moneyline_impl": moneyline_impl,
+                        "runline": runline
+                    }
+                    rows.append(row)
+
                     runline = None
                     moneyline = None
                 
                 if line_counter > 5:
                     line_counter = 0
                     append_data = False
-                            
+                if x > 1:
+                    x = 0
+                    game_number += 1
+
+        df = pd.DataFrame(rows, columns=["team", "gamenumber", "sportsbook", "moneyline", "moneyline_impl", "runline"])
+
+        print(df)
+                           
 
 
 if __name__ == "__main__":
