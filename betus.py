@@ -34,8 +34,7 @@ def scrape_betus(driver):
     url = "https://www.betus.com.pa/sportsbook/mlb/"
     driver.get(url)
     
-    print("Hit ENTER to proceed with scraping...")
-    input()
+    time.sleep(15)
 
     rows = []
     html = driver.page_source

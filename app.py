@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 import pandas as pd
 from betus import scrape_betus
 from kalshi import get_kalshi
+import time
 
 
 
@@ -13,39 +14,81 @@ def create_driver():
 
 def main():
 
-    driver = create_driver()
+    while True:
 
-    betus_df = scrape_betus(driver)
-    print(betus_df)
+        driver = create_driver()
 
-    kalshi_df = get_kalshi()
-    print(kalshi_df)
+        betus_df = scrape_betus(driver)
+        print(betus_df)
 
-    pd.set_option('display.max_rows', None)
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.width', None)
-    pd.set_option('display.max_colwidth', None)
+        kalshi_df = get_kalshi()
+        print(kalshi_df)
 
-    merged_df = pd.merge(
-        betus_df,
-        kalshi_df,
-        on="team",         # merge only where "team" matches
-        how="inner",       # only rows with matching teams in both DataFrames
-        suffixes=("_betus", "_kalshi")
-    )
-    print(merged_df)
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.width', None)
+        pd.set_option('display.max_colwidth', None)
 
-    first_team = {}
-    second_team = {}
-    for idx, row in merged_df.iterrows():
-        team = row["team"]
-        first_team[row["team"]] = row["team"]
-        first_team[row["moneyline_betus"]] = row["moneyline_impl_betus"]
+        merged_df = pd.merge(
+            betus_df,
+            kalshi_df,
+            on="team",         # merge only where "team" matches
+            how="inner",       # only rows with matching teams in both DataFrames
+            suffixes=("_betus", "_kalshi")
+        )
+        print(merged_df)
 
+        first_team = []
+        second_team = []
+        gamenumber_list_kalshi = []
+        gamenumber_list_betus = []
 
+        for idx, row in merged_df.iterrows():
+            gamenumber_list_betus.append(row['gamenumber_betus'])
+            gamenumber_list_kalshi.append(row['gamenumber_kalshi'])
+            print(f"DEBUG - gamenumber_list_betus: {gamenumber_list_betus} gamenumber_list_kalshi: {gamenumber_list_kalshi}")
 
+            data = {
+                "team": row["team"],
+                "moneyline_kalshi": row["moneyline_kalshi"],
+                "moneyline_betus": row["moneyline_impl_betus"]
+            }
 
+            if len(gamenumber_list_betus) == 1:
+                first_team.append(data)
+            if len(gamenumber_list_betus) == 2:
+                second_team.append(data)
 
+            if first_team and second_team:
+                if gamenumber_list_betus[0] == gamenumber_list_betus[1] and gamenumber_list_kalshi[0] == gamenumber_list_kalshi[1]:
+                    print("Debug: first and second team loaded")
+                    print("first team:", first_team)
+                    print("second team:", second_team)
+                    moneylines_first = [first_team[-1]["moneyline_kalshi"], first_team[-1]["moneyline_betus"]]
+                    highest_first = max(moneylines_first)
+                    lowest_first = min(moneylines_first)
+
+                    moneylines_second = [second_team[-1]["moneyline_kalshi"], second_team[-1]["moneyline_betus"]]
+                    highest_second = max(moneylines_second)
+                    lowest_second = min(moneylines_second)
+
+                    result = highest_first + lowest_second
+                    print("RESULT", result)
+                    result = lowest_first + highest_second
+                    print("RESULT", result)
+
+                    first_team = []
+                    second_team = []
+                else:
+                    first_team = []
+                    second_team = []
+            
+            if len(gamenumber_list_betus) == 2:
+                gamenumber_list_kalshi = []
+                gamenumber_list_betus = []
+
+        wait = 60 * 10
+        time.sleep(wait)
 
 
 if __name__ == "__main__":
