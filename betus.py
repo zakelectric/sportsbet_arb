@@ -69,8 +69,8 @@ def scrape_betus(driver):
                     moneyline_matches = re.findall(moneyline_pattern, line)
                     if moneyline_matches:
                         moneyline = moneyline_matches[0]
-                if 'ev' in cleaned_line:
-                    moneyline = '100'
+                if 'Ev' in cleaned_line or 'ev' in cleaned_line:
+                    moneyline = '+100'
                         #print(f"Found moneyline: {moneyline}")
 
             if moneyline and runline:
