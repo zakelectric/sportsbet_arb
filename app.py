@@ -16,13 +16,13 @@ def create_driver():
 def main():
 
     while True:
-
         driver = create_driver()
-
         betus_df = scrape_betus(driver)
+        print("----- BETUS DATAFRAME -----")
         print(betus_df)
 
         kalshi_df = get_kalshi()
+        print("---- KALSHI DATAFRAME ----")
         print(kalshi_df)
 
         pd.set_option('display.max_rows', None)
@@ -59,7 +59,7 @@ def main():
         for idx, row in filtered_df.iterrows():
             gamenumber_list_betus.append(row['gamenumber_betus'])
             gamenumber_list_kalshi.append(row['gamenumber_kalshi'])
-            print(f"DEBUG - gamenumber_list_betus: {gamenumber_list_betus} gamenumber_list_kalshi: {gamenumber_list_kalshi}")
+            #print(f"DEBUG - gamenumber_list_betus: {gamenumber_list_betus} gamenumber_list_kalshi: {gamenumber_list_kalshi}")
 
             data = {
                 "team": row["team"],
@@ -74,8 +74,8 @@ def main():
 
             if first_team and second_team:
                 if gamenumber_list_betus[0] == gamenumber_list_betus[1] and gamenumber_list_kalshi[0] == gamenumber_list_kalshi[1]:
-                    print("Debug: first and second team loaded")
-                    print("first team:", first_team)
+                    #print("Debug: first and second team loaded")
+                    print("\nfirst team:", first_team)
                     print("second team:", second_team)
                     moneylines_first = [first_team[-1]["moneyline_kalshi"], first_team[-1]["moneyline_betus"]]
                     highest_first = max(moneylines_first)
@@ -103,7 +103,6 @@ def main():
         driver.quit()
         wait = 60 * 30
         time.sleep(wait)
-
 
 if __name__ == "__main__":
     main()
