@@ -10,6 +10,7 @@ import time
 def create_driver():
     opts = uc.ChromeOptions()
     opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
+    #opts.add_argument("--headless=new") 
     return uc.Chrome(options=opts)
 
 def main():
@@ -38,12 +39,24 @@ def main():
         )
         print(merged_df)
 
+        # Filter out rows where gamenumber_betus or gamenumber_kalshi occurs only once
+        betus_counts = merged_df["gamenumber_betus"].value_counts()
+        kalshi_counts = merged_df["gamenumber_kalshi"].value_counts()
+
+        filtered_df = merged_df[
+            (merged_df["gamenumber_betus"].map(betus_counts) > 1) &
+            (merged_df["gamenumber_kalshi"].map(kalshi_counts) > 1)
+        ]
+
+        print(filtered_df)
+
         first_team = []
         second_team = []
         gamenumber_list_kalshi = []
         gamenumber_list_betus = []
 
-        for idx, row in merged_df.iterrows():
+
+        for idx, row in filtered_df.iterrows():
             gamenumber_list_betus.append(row['gamenumber_betus'])
             gamenumber_list_kalshi.append(row['gamenumber_kalshi'])
             print(f"DEBUG - gamenumber_list_betus: {gamenumber_list_betus} gamenumber_list_kalshi: {gamenumber_list_kalshi}")
@@ -87,7 +100,8 @@ def main():
                 gamenumber_list_kalshi = []
                 gamenumber_list_betus = []
 
-        wait = 60 * 10
+        driver.quit()
+        wait = 60 * 30
         time.sleep(wait)
 
 

@@ -34,7 +34,7 @@ def scrape_betus(driver):
     url = "https://www.betus.com.pa/sportsbook/mlb/"
     driver.get(url)
     
-    time.sleep(15)
+    #time.sleep(15)
 
     rows = []
     html = driver.page_source
@@ -42,7 +42,7 @@ def scrape_betus(driver):
     page_text = soup.get_text(separator='\n', strip=True)
 
     for line in page_text.split('\n'):
-        #print("#:", line)
+        print("#:", line)
         match, score = process.extractOne(line, mlb_teams)
         if score > 80:
             #print(f"Matched team: {match} (score: {score})")
@@ -69,6 +69,8 @@ def scrape_betus(driver):
                     moneyline_matches = re.findall(moneyline_pattern, line)
                     if moneyline_matches:
                         moneyline = moneyline_matches[0]
+                if 'ev' in cleaned_line:
+                    moneyline = '100'
                         #print(f"Found moneyline: {moneyline}")
 
             if moneyline and runline:
