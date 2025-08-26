@@ -4,6 +4,7 @@ import time
 import json
 from fuzzywuzzy import process
 import re
+import os
 
 
 def scrape_betus(driver):
@@ -28,18 +29,31 @@ def scrape_betus(driver):
             result = 100 / (abs(moneyline) + 100)
         return result
 
-    with open("mlb_teams.json") as f:
-        mlb_teams = json.load(f)
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "mlb_teams.json")) as f:
+            mlb_teams = json.load(f)
+    except FileNotFoundError:
+        print("Error: mlb_teams.json not found")
+        return pd.DataFrame(columns=["team", "gamenumber_betus", "sportsbook", "moneyline_betus", "moneyline_impl_betus", "runline_betus"])
 
     url = "https://www.betus.com.pa/sportsbook/mlb/"
-    driver.get(url)
+    
+    try:
+        driver.get(url)
+    except Exception as e:
+        print(f"Error loading BetUS page: {e}")
+        return pd.DataFrame(columns=["team", "gamenumber_betus", "sportsbook", "moneyline_betus", "moneyline_impl_betus", "runline_betus"])
     
     #time.sleep(15)
 
     rows = []
-    html = driver.page_source
-    soup = BeautifulSoup(html, "lxml")
-    page_text = soup.get_text(separator='\n', strip=True)
+    try:
+        html = driver.page_source
+        soup = BeautifulSoup(html, "lxml")
+        page_text = soup.get_text(separator='\n', strip=True)
+    except Exception as e:
+        print(f"Error parsing page content: {e}")
+        return pd.DataFrame(columns=["team", "gamenumber_betus", "sportsbook", "moneyline_betus", "moneyline_impl_betus", "runline_betus"])
 
     for line in page_text.split('\n'):
         print("#:", line)
