@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 import pandas as pd
 from betus import scrape_betus
 from kalshi import get_kalshi
+from polymarket import scrape_polymarket
 import time
 
 
@@ -17,6 +18,11 @@ def main():
 
     while True:
         driver = create_driver()
+
+        polymarket_df = scrape_polymarket(driver)
+
+        input()
+
         betus_df = scrape_betus(driver)
         print("----- BETUS DATAFRAME -----")
         print(betus_df)

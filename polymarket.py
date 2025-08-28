@@ -1,47 +1,33 @@
+# import json
+
 # import requests
 
-# url = "https://clob.polymarket.com/markets"
+# # Get markets
+# markets = requests.get("https://gamma-api.polymarket.com/markets")
+# print(markets.json())
+
+# # Get events
+# events = requests.get("https://gamma-api.polymarket.com/events")
+# json_data = json.dumps(events.json(), indent=4)
+# with open("events.json", "w") as file:
+#     file.write(json_data)
+# print(
+#     "Data formatted and saved to events.json, look for clobTokenIds later in this tutorial"
+# )
+
+from bs4 import BeautifulSoup
 
 
-# response = requests.get(url)
-# print("RESPONSE", response)
-# data = response.json()
-# print("DATA", data)
+def scrape_polymarket(driver):
 
-# from py_clob_client import py_clob_client
-# #print(dir(py_clob_client))
+    url = "https://polymarket.com/sports/mlb/games"
+    driver.get(url)
 
-# client = py_clob_client()
-# markets = client.get_markets()
-# print(markets)
+    #time.sleep(15)
 
-# from py_clob_client.client import ClobClient
+    rows = []
+    html = driver.page_source
+    soup = BeautifulSoup(html, "lxml")
+    page_text = soup.get_text(separator='\n', strip=True)
 
-# client = ClobClient("https://clob.polymarket.com/")  # Level 0 (no auth)
-
-# ok = client.get_ok()
-# results = client.get_markets()
-
-# for market in results['data']:
-#     print(market['market_slug'])
-    # if 'mlb' in market['market_slug']:
-    #     print("\n")
-    #     print(market)
-
-import requests
-import json
-
-url = "https://gamma-api.polymarket.com/markets"
-
-response = requests.get(url)
-
-# Decode bytes to string if needed
-if isinstance(response.content, bytes):
-    text = response.content.decode('utf-8')
-else:
-    text = response.text
-
-# Parse JSON
-data = json.loads(text)
-for market in data:
-    print(market)
+    print(page_text)
