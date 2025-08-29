@@ -1,33 +1,40 @@
-# import json
-
-# import requests
-
-# # Get markets
-# markets = requests.get("https://gamma-api.polymarket.com/markets")
-# print(markets.json())
-
-# # Get events
-# events = requests.get("https://gamma-api.polymarket.com/events")
-# json_data = json.dumps(events.json(), indent=4)
-# with open("events.json", "w") as file:
-#     file.write(json_data)
-# print(
-#     "Data formatted and saved to events.json, look for clobTokenIds later in this tutorial"
-# )
-
 from bs4 import BeautifulSoup
-
+from rapidfuzz import process, fuzz
+import json
 
 def scrape_polymarket(driver):
+
+    team = None
+    price = None
 
     url = "https://polymarket.com/sports/mlb/games"
     driver.get(url)
 
-    #time.sleep(15)
-
-    rows = []
     html = driver.page_source
     soup = BeautifulSoup(html, "lxml")
     page_text = soup.get_text(separator='\n', strip=True)
 
-    print(page_text)
+    # Open and unpack abbreviations
+    with open("mlb_teams_abr.json") as file:
+        mlb_teams_abr_json = json.load(file)
+    mlb_teams_abr = []
+    for item in mlb_teams_abr_json:
+        mlb_teams_abr.append(item['abbr'])
+
+    for line in page_text.split('\n'):
+
+        print("#:", line)
+        match, score, _ = process.extractOne(line, mlb_teams_abr)
+
+        if score > 80:
+            print("----------------------- FOUND A TEAM MATCH")
+            team = match
+            if '¢' in line and len(line) < 4:
+                print("-------------------------- FOUND A PRICE MATCH")
+                price = line
+        
+        if team and price:
+            print("LINE AND PRICE FOUND")
+            print("line", line)
+            print("price", price)
+            input()
